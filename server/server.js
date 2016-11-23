@@ -3,6 +3,11 @@ var graphqlHTTP = require('express-graphql');
 var { buildSchema, Source, parse, validate, execute, GraphQLSchema, ExecutionResult } = require('graphql');
 var bodyparser = require('body-parser');
 var parseBody = require('./parseBody');
+var url = require('url');
+
+// var {wrapResolver, getRoot} = require('../lib/librarytobenamed');
+
+
 class Message {
   constructor(id, {content, author}) {
     this.id = id;
@@ -30,7 +35,7 @@ class RandomDie {
     return output;
   }
 };
-
+let fakeid = 0;
 var root = {
   quoteOfTheDay: () => {
     return Math.random() < 0.5 ? 'Take it easy' : 'Salvation lies within';
@@ -59,6 +64,11 @@ var root = {
   getMessage: function () {
     console.log(fakeDatabase);
     return fakeDatabase.message;
+  },
+  createMessage: function({input}){
+    console.log(input);
+    fakeDatabase[fakeid++] = input;
+    return new Message(fakeid-1, input);
   }
 };
 
@@ -101,7 +111,6 @@ app.use(function(req, res, next) {
 
 
 // function rawBody(req,res,next){
-//   req.setEncoding('utf8');
 //   req.rawBody = '';
 //   req.on('data', function(chunk){
 //     req.rawBody += chunk;
@@ -113,23 +122,25 @@ app.use(function(req, res, next) {
 // }
 
 // app.use(rawBody);
-// app.use((req,res,next) => {
-//   console.log(` ${req.ip} ==========================================`);
-//   console.log(req.url);
-//   console.log(getGraphQLParams(req));
-// //   const source = new Source(req.rawBody); // source creates a stupid object with body and name
-// //   const documentAST = parse(`{
-// //   getDie(numSides: 5) {
-// //     numSides
-// //     rollOnce
-// //   }
-// // }`);
-// //   console.log(documentAST);
-//   next();
-// });
+/*app.use((req,res,next) => {
+  console.log(` ${req.ip} ==========================================`);
+  console.log(req.url);
+  getGraphQLParams(req).then(dat => {
+    console.log(dat);
+  });
+//   const source = new Source(req.rawBody); // source creates a stupid object with body and name
+//   const documentAST = parse(`{
+//   getDie(numSides: 5) {
+//     numSides
+//     rollOnce
+//   }
+// }`);
+//   console.log(documentAST);
+  next();
+});
+*/
 
-
-app.use((request, response) => {
+/*app.use((request, response) => {
     // Higher scoped variables are referred to at various stages in the
     // asynchronous state machine below.
     let schema;
@@ -315,8 +326,8 @@ app.use((request, response) => {
         sendResponse(response, payload);
       }
     });
-  };
-);
+  }
+);*/
 
 
 
@@ -339,16 +350,16 @@ app.listen(4000);
 console.log('Running a GraphQL API server at localhost:4000/graphql');
 
 
-function getGraphQLParams(request) {
+/*function getGraphQLParams(request) {
   return parseBody(request).then(bodyData => {
     const urlData = request.url && url.parse(request.url, true).query || {};
     return parseGraphQLParams(urlData, bodyData);
   });
 }
 
-/**
- * Helper function to get the GraphQL params from the request.
- */
+
+//Helper function to get the GraphQL params from the request.
+
 function parseGraphQLParams(
   urlData,
   bodyData
@@ -381,3 +392,4 @@ function parseGraphQLParams(
 
   return { query, variables, operationName, raw };
 }
+*/
