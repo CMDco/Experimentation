@@ -74,7 +74,7 @@ registerType(RandomDie);
     fakeid++;
     return fakeDatabase[fakeid-1];
   }
-  function updateMessage(id, input){
+  function updateMessage(id, {input}){
     // console.log("~~~~~~~~~~~~~~~~~~~~~~");
     // console.log(fakeDatabase[id]);
     // console.log("~~~~~~~~");
