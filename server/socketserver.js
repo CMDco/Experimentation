@@ -9,6 +9,8 @@ var url = require('url');
 var {registerResolver, getRoot, registerType} = require('../lib/librarytobenamed');
 
 
+var app = express();
+
 app.listen(4000, () => {
   console.log('Running a GraphQL API server at localhost:4000/graphql');
 });
