@@ -5,7 +5,7 @@ var bodyparser = require('body-parser');
 var parseBody = require('./parseBody');
 var url = require('url');
 
-var {registerResolver, getRoot} = require('../lib/librarytobenamed');
+var {registerResolver, getRoot, registerType} = require('../lib/librarytobenamed');
 
 
 class Message {
@@ -22,11 +22,9 @@ class RandomDie {
   constructor(numSides) {
     this.numSides = numSides;
   }
-
   rollOnce() {
     return 1 + Math.floor(Math.random() * this.numSides);
   }
-
   roll({numRolls}) {
     var output = [];
     for (var i = 0; i < numRolls; i++) {
@@ -37,6 +35,10 @@ class RandomDie {
 };
 let fakeid = 0;
 
+// ============================================================================= Types
+registerType(Message, 'id', 'author');
+registerType(RandomDie);
+// ============================================================================= RESOLVERS
   function quoteOfTheDay(){
     return Math.random() < 0.5 ? 'Take it easy' : 'Salvation lies within';
   }
@@ -66,13 +68,23 @@ let fakeid = 0;
     return fakeDatabase.message;
   }
   function createMessage({input}){
+    console.log("!!!!!!!!!!!!!!!!!!!!");
     console.log(input);
-    fakeDatabase[fakeid++] = input;
-    return new Message(fakeid-1, input);
+    fakeDatabase[fakeid] = new Message(fakeid, input);
+    fakeid++;
+    return fakeDatabase[fakeid-1];
   }
-registerResolver(quoteOfTheDay, random, rollThreeDice, rollDice, getDie, setMessage, getMessage, createMessage);
+  function updateMessage(id, input){
+    // console.log("~~~~~~~~~~~~~~~~~~~~~~");
+    // console.log(fakeDatabase[id]);
+    // console.log("~~~~~~~~");
+    // console.log(input);
+    fakeDatabase[id].content = input.content;
+    fakeDatabase[id].author = input.author;
+    return fakeDatabase[id];
+  }
+registerResolver(quoteOfTheDay, random, rollThreeDice, rollDice, getDie, setMessage, getMessage, createMessage, updateMessage);
 let root = getRoot();
-console.log(root);
 
 var schema = buildSchema(`
   input MessageInput {
