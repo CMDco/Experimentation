@@ -117,14 +117,6 @@ var schema = buildSchema(`
 `);
 
 
-
-{
-  user(uid: 500){
-    id,
-    friends
-  }
-}
-
 var app = express();
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");

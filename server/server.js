@@ -103,12 +103,12 @@ var schema = buildSchema(`
 `);
 
 
-let tinfo = new TypeInfo(new GraphQLSchema('{\nrollThreeDice\n}'));
-console.log(tinfo);
-console.log('====');
-console.log(Object.keys(tinfo));
-console.log();
-console.log(tinfo.getDirective());
+// let tinfo = new TypeInfo(new GraphQLSchema('{\nrollThreeDice\n}'));
+// console.log(tinfo);
+// console.log('====');
+// console.log(Object.keys(tinfo));
+// console.log();
+// console.log(tinfo.getDirective());
 
 
 
