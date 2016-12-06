@@ -2,13 +2,95 @@ import $ from 'jquery';
 import Rx from 'rxjs/Rx';
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//================================================================================
+// const source$ = Rx.Observable.interval(100)
+  // .take(5);
+
+// source$.subscribe(x=>{console.log(x)},
+// (err)=>console.log(err), () => console.log('complete'));
+
+// const source$ = Rx.Observable.range(25, 100);
+
+// source$.subscribe(x=>{console.log(x)},
+// (err)=>console.log(err), () => console.log('complete'));
+
+
+/*const source$ = Rx.Observable.interval(1000)
+  .take(10)
+  .map(value => value * value);
+
+source$.subscribe(value => {
+  console.log(value);
+});*/
+
+// const source$ = Rx.Observable.from(['John', 'Tom', 'Sean'])
+//   .map(v => {
+//     return v.toUpperCase();
+//   })
+//   .map(v => `I am ${v}`);
+
+// source$.subscribe(v => {
+//   console.log(v);
+// });
+
+// function getUser(username){
+//   return $.ajax({
+//     url: 'https://api.github.com/users/' + username,
+//     dataType: 'jsonp'
+//   }).promise()
+// }
+
+// let inputSource = $('#input');
+// const inputSource$ = Rx.Observable.fromPromise(getUser('Martin-Ting'))
+//   .map(user => user.data)
+//   .subscribe(v => console.log(v));
+
+//================================================================================
+
+/*
 // From Promise
 const myPromise = new Promise((resolve, reject) => {
   console.log('Creating Promise');
   setTimeout(() => {
     resolve('Hello from promise');
   }, 3000);
-});
+});*/
 
 /*myPromise.then(x => {
   console.log(x);
@@ -16,7 +98,7 @@ const myPromise = new Promise((resolve, reject) => {
 
 const source$ = Rx.Observable.fromPromise(myPromise);
 source$.subscribe(x=>{console.log(x)});*/
-
+/*
 function getUser(username){
   return $.ajax({
     url: 'https://api.github.com/users/' + username,
@@ -36,22 +118,9 @@ const inputSource$ = Rx.Observable.fromEvent(inputSource, 'keyup')
         
       }, (err) => {console.log(err)}, () => console.log('complete'));
   }, (err) => console.log(err), () => console.log('complete'));
+*/
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+//================================================================================
 
 // From scratch
 const observableEvents = false;

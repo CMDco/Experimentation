@@ -56,13 +56,59 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+	//================================================================================
+	// const source$ = Rx.Observable.interval(100)
+	// .take(5);
+
+	// source$.subscribe(x=>{console.log(x)},
+	// (err)=>console.log(err), () => console.log('complete'));
+
+	// const source$ = Rx.Observable.range(25, 100);
+
+	// source$.subscribe(x=>{console.log(x)},
+	// (err)=>console.log(err), () => console.log('complete'));
+
+
+	/*const source$ = Rx.Observable.interval(1000)
+	  .take(10)
+	  .map(value => value * value);
+
+	source$.subscribe(value => {
+	  console.log(value);
+	});*/
+
+	// const source$ = Rx.Observable.from(['John', 'Tom', 'Sean'])
+	//   .map(v => {
+	//     return v.toUpperCase();
+	//   })
+	//   .map(v => `I am ${v}`);
+
+	// source$.subscribe(v => {
+	//   console.log(v);
+	// });
+
+	// function getUser(username){
+	//   return $.ajax({
+	//     url: 'https://api.github.com/users/' + username,
+	//     dataType: 'jsonp'
+	//   }).promise()
+	// }
+
+	// let inputSource = $('#input');
+	// const inputSource$ = Rx.Observable.fromPromise(getUser('Martin-Ting'))
+	//   .map(user => user.data)
+	//   .subscribe(v => console.log(v));
+
+	//================================================================================
+
+	/*
 	// From Promise
-	var myPromise = new Promise(function (resolve, reject) {
+	const myPromise = new Promise((resolve, reject) => {
 	  console.log('Creating Promise');
-	  setTimeout(function () {
+	  setTimeout(() => {
 	    resolve('Hello from promise');
 	  }, 3000);
-	});
+	});*/
 
 	/*myPromise.then(x => {
 	  console.log(x);
@@ -70,31 +116,29 @@
 
 	const source$ = Rx.Observable.fromPromise(myPromise);
 	source$.subscribe(x=>{console.log(x)});*/
-
-	function getUser(username) {
-	  return _jquery2.default.ajax({
+	/*
+	function getUser(username){
+	  return $.ajax({
 	    url: 'https://api.github.com/users/' + username,
 	    dataType: 'jsonp'
-	  }).promise();
+	  }).promise()
 	}
 
-	var inputSource = (0, _jquery2.default)('#input');
-	var inputSource$ = _Rx2.default.Observable.fromEvent(inputSource, 'keyup').subscribe(function (e) {
-	  _Rx2.default.Observable.fromPromise(getUser(e.target.value)).subscribe(function (dat) {
-	    console.log(dat);
-	    (0, _jquery2.default)('#name').text(dat.data.name);
-	    (0, _jquery2.default)('#blog').text(dat.data.location);
-	    (0, _jquery2.default)('#repos').text(dat.data.repos_url);
-	  }, function (err) {
-	    console.log(err);
-	  }, function () {
-	    return console.log('complete');
-	  });
-	}, function (err) {
-	  return console.log(err);
-	}, function () {
-	  return console.log('complete');
-	});
+	let inputSource = $('#input');
+	const inputSource$ = Rx.Observable.fromEvent(inputSource, 'keyup')
+	  .subscribe((e) => {
+	    Rx.Observable.fromPromise(getUser(e.target.value))
+	      .subscribe((dat) => {
+	        console.log(dat);
+	        $('#name').text(dat.data.name);
+	        $('#blog').text(dat.data.location);
+	        $('#repos').text(dat.data.repos_url);
+	        
+	      }, (err) => {console.log(err)}, () => console.log('complete'));
+	  }, (err) => console.log(err), () => console.log('complete'));
+	*/
+
+	//================================================================================
 
 	// From scratch
 	var observableEvents = false;
