@@ -58,6 +58,18 @@
 
 	console.log('RxJS Boiler Running...');
 
+	var btn = (0, _jquery2.default)('#btn');
+
+	var btnStream$ = _Rx2.default.Observable.fromEvent(btn, 'click');
+
+	btnStream$.subscribe(function (e) {
+	  console.log(e);
+	}, function (err) {
+	  console.log(err);
+	}, function () {
+	  console.log('complete');
+	});
+
 /***/ },
 /* 1 */
 /***/ function(module, exports, __webpack_require__) {
