@@ -1,19 +1,73 @@
-import $ from 'jquery';
+
 import Rx from 'rxjs/Rx';
 
 
+/** Job Queue Logic **/
+let jobQueue = [];
 
+function addJob(job){
+  jobQueue.push(job);
+}
 
+function takeJob(){
+  return jobQueue.splice(0,1)[0];
+}
 
+function getJobs(){
+  return jobQueue;
+}
 
+/** Observable Logic **/
+let watchdogs = {};
+function setup(name, callback, errcallback, completecallback, interval){
+  if(!watchdogs[name]){
+    watchdogs[name] = new Rx.Observable.interval(interval);
+    watchdogs[name].subscribe(callback, errcallback, completecallback);
+  }
+}
 
+/** Application Logic **/
+function handleJobs(intervalPeriod){
+  if(jobQueue.length > 0){
+    let currJob = takeJob();
+    console.log(`intervalPeriod: ${intervalPeriod} ================`)
+    console.log(`took Job(${jobQueue.length}: `);
+    console.log(currJob.name);
+  }
+}
 
+setup("test", handleJobs, (err) => console.log(err), () => console.log('complete'), 1000);
 
+function Job(name, task){
+  this.name = name;
+  this.task = task;
+}
 
+let number = 0;
+function fillQueue(){
+  addJob(new Job(`${number} job`, `${number++} task`));
+  addJob(new Job(`${number} job`, `${number++} task`));
+  addJob(new Job(`${number} job`, `${number++} task`));
+  addJob(new Job(`${number} job`, `${number++} task`));
+  addJob(new Job(`${number} job`, `${number++} task`));
+  addJob(new Job(`${number} job`, `${number++} task`));
+  addJob(new Job(`${number} job`, `${number++} task`));
+};
 
+let intervalID = setInterval(() => {
+  console.log(`SetInterval filling Queue`);
+  fillQueue();
+  console.log(`SetInterval ${jobQueue.length} ==  ${jobQueue}`);
+  if(number > 5){
+    console.log(`clearing Interval=====================`);
+    clearInterval(intervalID);
+  }
+}, 100);
 
-
-
+setTimeout(() => {
+  console.log(`setTimeout filling Queue`);
+  fillQueue();
+}, 10000)
 
 
 
