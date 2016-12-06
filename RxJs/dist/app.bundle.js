@@ -56,42 +56,145 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	console.log('RxJS Boiler Running...');
-
-	var btn = (0, _jquery2.default)('#btn');
-	var input = (0, _jquery2.default)('#input');
-	var output = (0, _jquery2.default)('#output');
-	var btnStream$ = _Rx2.default.Observable.fromEvent(btn, 'click');
-
-	var printVal = 0;
-	btnStream$.subscribe(function (e) {
-	  console.log(e.target.innerHTML + printVal++);
-	}, function (err) {
-	  console.log(err);
-	}, function () {
-	  console.log('complete');
+	// From Promise
+	var myPromise = new Promise(function (resolve, reject) {
+	  console.log('Creating Promise');
+	  setTimeout(function () {
+	    resolve('Hello from promise');
+	  }, 3000);
 	});
 
-	var inputStream$ = _Rx2.default.Observable.fromEvent(input, 'keyup');
-
-	inputStream$.subscribe(function (e) {
-	  console.log(e.target.value + printVal++);
-	  output.append(e.target.value);
-	}, function (err) {
-	  console.log(err);
-	}, function () {
-	  console.log('complete');
+	/*myPromise.then(x => {
+	  console.log(x);
 	});
 
-	var moveStream$ = _Rx2.default.Observable.fromEvent(document, 'mousemove');
-	moveStream$.subscribe(function (e) {
-	  console.log('X: ' + e.clientX + ' + Y: ' + e.clientY);
-	  output.html('<h1>X: ' + e.clientX + ' + Y: ' + e.clientY + '</h1>');
+	const source$ = Rx.Observable.fromPromise(myPromise);
+	source$.subscribe(x=>{console.log(x)});*/
+
+	function getUser(username) {
+	  return _jquery2.default.ajax({
+	    url: 'https://api.github.com/users/' + username,
+	    dataType: 'jsonp'
+	  }).promise();
+	}
+
+	var inputSource = (0, _jquery2.default)('#input');
+	var inputSource$ = _Rx2.default.Observable.fromEvent(inputSource, 'keyup').subscribe(function (e) {
+	  _Rx2.default.Observable.fromPromise(getUser(e.target.value)).subscribe(function (dat) {
+	    console.log(dat);
+	    (0, _jquery2.default)('#name').text(dat.data.name);
+	    (0, _jquery2.default)('#blog').text(dat.data.location);
+	    (0, _jquery2.default)('#repos').text(dat.data.repos_url);
+	  }, function (err) {
+	    console.log(err);
+	  }, function () {
+	    return console.log('complete');
+	  });
 	}, function (err) {
 	  return console.log(err);
 	}, function () {
-	  return console.log('completed');
+	  return console.log('complete');
 	});
+
+	// From scratch
+	var observableEvents = false;
+	var collectionEvents = false;
+	var scratch = true;
+
+	/*const source$ = new Rx.Observable(observer => {
+	  console.log('creating Observable');
+
+	  observer.next('Hello World');
+	  observer.next('Another Value');
+	  observer.error(new Error('something went wrong'));
+	  setTimeout(() => {
+	    observer.next('yet another');
+	    observer.complete();
+	  }, 5000);
+	});
+
+	source$
+	  .catch(err => Rx.Observable.of(err))
+	  .subscribe(x=>{
+	    console.log(x);
+	}, err => console.log(err), () => console.log('completed'));*/
+
+	if (observableEvents) {
+	  (function () {
+	    console.log('RxJS Boiler Running...');
+
+	    var btn = (0, _jquery2.default)('#btn');
+	    var input = (0, _jquery2.default)('#input');
+	    var output = (0, _jquery2.default)('#output');
+	    var btnStream$ = _Rx2.default.Observable.fromEvent(btn, 'click');
+
+	    var printVal = 0;
+	    btnStream$.subscribe(function (e) {
+	      console.log(e.target.innerHTML + printVal++);
+	    }, function (err) {
+	      console.log(err);
+	    }, function () {
+	      console.log('complete');
+	    });
+
+	    var inputStream$ = _Rx2.default.Observable.fromEvent(input, 'keyup');
+
+	    inputStream$.subscribe(function (e) {
+	      console.log(e.target.value + printVal++);
+	      output.append(e.target.value);
+	    }, function (err) {
+	      console.log(err);
+	    }, function () {
+	      console.log('complete');
+	    });
+
+	    var moveStream$ = _Rx2.default.Observable.fromEvent(document, 'mousemove');
+	    moveStream$.subscribe(function (e) {
+	      console.log('X: ' + e.clientX + ' + Y: ' + e.clientY);
+	      output.html('<h1>X: ' + e.clientX + ' + Y: ' + e.clientY + '</h1>');
+	    }, function (err) {
+	      return console.log(err);
+	    }, function () {
+	      return console.log('completed');
+	    });
+
+	    var numbers = [];
+	    if (collectionEvents) {
+	      numbers = [33, 44, 55, 66, 77];
+	      var numbers$ = _Rx2.default.Observable.from(numbers);
+
+	      numbers$.subscribe(function (v) {
+	        console.log(v);
+	      }, function (err) {
+	        return console.log(err);
+	      }, function () {
+	        return console.log('completed');
+	      });
+	    }
+	    document.posts = [{ title: 'Post 1', body: 'This is a 1' }, { title: 'Post 2', body: 'This is a 2' }, { title: 'Post 3', body: 'This is a 3' }, { title: 'Post 4', body: 'This is a 4' }, { title: 'Post 5', body: 'This is a 5' }];
+
+	    var posts$ = _Rx2.default.Observable.from(document.posts);
+	    posts$.subscribe(function (post) {
+	      console.log(post);
+	      (0, _jquery2.default)('#posts').append('<li><h3>' + post.title + '</h3><p>' + post.body + '</p></li>');
+	    }, function (err) {
+	      return console.log(err);
+	    }, function () {
+	      return console.log('completed');
+	    });
+
+	    var set = new Set(['Hello', 44, { title: 'MyTitle' }]);
+
+	    var set$ = _Rx2.default.Observable.from(set);
+	    set$.subscribe(function (e) {
+	      console.log(e);
+	    }, function (err) {
+	      return console.log(err);
+	    }, function () {
+	      return console.log('completed');
+	    });
+	  })();
+	}
 
 /***/ },
 /* 1 */
