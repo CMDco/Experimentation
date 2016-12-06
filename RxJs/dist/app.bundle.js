@@ -59,15 +59,38 @@
 	console.log('RxJS Boiler Running...');
 
 	var btn = (0, _jquery2.default)('#btn');
-
+	var input = (0, _jquery2.default)('#input');
+	var output = (0, _jquery2.default)('#output');
 	var btnStream$ = _Rx2.default.Observable.fromEvent(btn, 'click');
 
+	var printVal = 0;
 	btnStream$.subscribe(function (e) {
-	  console.log(e);
+	  console.log(e.target.innerHTML + printVal++);
 	}, function (err) {
 	  console.log(err);
 	}, function () {
 	  console.log('complete');
+	});
+
+	var inputStream$ = _Rx2.default.Observable.fromEvent(input, 'keyup');
+
+	inputStream$.subscribe(function (e) {
+	  console.log(e.target.value + printVal++);
+	  output.append(e.target.value);
+	}, function (err) {
+	  console.log(err);
+	}, function () {
+	  console.log('complete');
+	});
+
+	var moveStream$ = _Rx2.default.Observable.fromEvent(document, 'mousemove');
+	moveStream$.subscribe(function (e) {
+	  console.log('X: ' + e.clientX + ' + Y: ' + e.clientY);
+	  output.html('<h1>X: ' + e.clientX + ' + Y: ' + e.clientY + '</h1>');
+	}, function (err) {
+	  return console.log(err);
+	}, function () {
+	  return console.log('completed');
 	});
 
 /***/ },
